@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+flask = "*"
+flask-sqlalchemy = "*"
+python-dotenv = "*"
+flask-cors = "*"
+flask-socketio = "*"
+eventlet = "*"
+mysql-connector-python = "*"
+elasticsearch-dsl = "*"
+pycryptodome = "*"
+pycryptodomex = "*"
+
+[requires]
+python_version = "3.7"

@@ -1,0 +1,3 @@
+FLASK_APP=__init__
+FLASK_ENV=production
+DEBUG_TB_INTERCEPT_REDIRECTS=False
