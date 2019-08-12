@@ -15,7 +15,6 @@ eventlet = "*"
 mysql-connector-python = "*"
 elasticsearch-dsl = "*"
 pycryptodome = "*"
-pycryptodomex = "*"
 
 [requires]
 python_version = "3.7"
