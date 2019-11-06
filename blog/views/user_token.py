@@ -39,7 +39,11 @@ def login():
 
     if user_info:  # 不存在该用户
         db_password = rsa_utils.decrypt_by_PKS1_OAEP(user_info.password)  # 数据中用户密码解密后的明文
-        response_body["status"] = True if password == db_password else False  # 密码是否正确
+        if password == db_password:  # 密码是否正确
+            response_body["status"] = True
+            response_body["data"]["message"] = "登陆成功！"
+        else:
+            response_body["status"] = False
     else:
         response_body["status"] = False
     return jsonify(response_body)
@@ -54,19 +58,30 @@ def add_user():
     """
     response_body = {
         "status": False,
-        "data": None
+        "data": {
+            "message": None
+        }
     }
     request_body = json.loads(request.data)
     # request_body = request.get_json()
     try:
+
         account = request_body.get("account")
         en_password = request_body.get("en_password")
+
+        is_exist_user_info = db.session.query(UserInfo).filter(UserInfo.account == account).one_or_none()  # 查询数据中是否有该用户
+        if is_exist_user_info:
+            response_body["data"]["message"] = "注册失败，该账号已注册！"
+            return jsonify(response_body)
+
         password = rsa_utils.decrypt_by_PKCS1_v1_5(en_password)
         password = rsa_utils.encrypt_by_PKCS1_OAEP(password)
         user_info = [UserInfo(account=account, password=password, name="test_name", last_login=datetime.now(),
                               modified=datetime.now(), create=datetime.now())]
         db.session.add_all(user_info)
         db.session.commit()
+        response_body["status"] = True
     except Exception as e:
-        print(e)
+        print(e, "\n")
+        db.session.rollback()
     return jsonify(response_body)
