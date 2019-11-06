@@ -11,3 +11,6 @@
 
 # Environments
 .env
+
+# development
+.idea
