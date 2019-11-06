@@ -13,7 +13,6 @@ def create_app():
     settings.init_app(app)  # 初始化在models初始化之前，因为有ORM设置在里面
     views.init_app(app)
     models.init_app(app)
-    # settings.init_app(app)
     app.json_encoder = JSONEncoder
     # toolbar = DebugToolbarExtension()
     # toolbar.init_app(app)
