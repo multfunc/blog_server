@@ -45,7 +45,7 @@ def login():
     return jsonify(response_body)
 
 
-@user_token_bp.route('/add', methods=['POST'])
+@user_token_bp.route('/register', methods=['POST'])
 @cross_origin()  # 置于route后
 def add_user():
     """
