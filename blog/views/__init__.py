@@ -1,5 +1,5 @@
 from flask import Flask
-from views.test import test_bp
+from blog.views.test import test_bp
 
 
 def init_app(app: Flask):

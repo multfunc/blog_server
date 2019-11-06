@@ -1,22 +1,22 @@
 from flask import Flask, json
 from decimal import Decimal
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 from flask_socketio import SocketIO
+from blog import views,settings,models
 
 
 socketio = SocketIO()
 
 
 def create_app():
-    import views, models, settings
     app = Flask(__name__)
     settings.init_app(app)  # 初始化在models初始化之前，因为有ORM设置在里面
     views.init_app(app)
     models.init_app(app)
     # settings.init_app(app)
     app.json_encoder = JSONEncoder
-    toolbar = DebugToolbarExtension()
-    toolbar.init_app(app)
+    # toolbar = DebugToolbarExtension()
+    # toolbar.init_app(app)
 
     # websocket support
     # app.config['SECRET_KEY']='secret string'
