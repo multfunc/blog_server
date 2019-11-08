@@ -9,6 +9,15 @@ user_info_role = db.Table('user_info_role',
                           db.Column('create', db.DateTime, db.ColumnDefault(datetime.now()), nullable=False)
                           )
 
+user_info_user_status = db.Table('user_info_user_status',
+                                 db.Column('user_info_account', db.String(255), db.ForeignKey('user_info.account'),
+                                           primary_key=True),
+                                 db.Column('user_status_auto_id', db.Integer, db.ForeignKey('user_status.auto_id'),
+                                           primary_key=True),
+                                 db.Column('modified', db.DateTime, db.ColumnDefault(datetime.now()), nullable=False),
+                                 db.Column('create', db.DateTime, db.ColumnDefault(datetime.now()), nullable=False)
+                                 )
+
 
 class UserInfo(db.Model):
     """
@@ -17,7 +26,8 @@ class UserInfo(db.Model):
     account = db.Column(db.String(255), primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     password = db.Column(db.VARBINARY(255), nullable=False)  # 貌似加密后最长128
-    last_login = db.Column(db.DateTime, nullable=False)
+    # last_login = db.Column(db.DateTime, nullable=False)
     modified = db.Column(db.DateTime, nullable=False)
     create = db.Column(db.DateTime, nullable=False)
     roles = db.relationship('Role', secondary=user_info_role, backref=('user_infos'))
+    user_status = db.relationship('UserStatus', secondary=user_info_user_status, backref=('user_infos'))

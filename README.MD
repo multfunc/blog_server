@@ -15,3 +15,7 @@ At a glance:
 WebSocket support:
     flask-socketio+eventlet
 
+API category:
+    normal  api
+    manage  api
+

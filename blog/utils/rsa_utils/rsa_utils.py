@@ -69,6 +69,8 @@ if __name__ == "__main__":
 
     test=bytes('junfenghe'.encode("utf-8"))
     cipher_text = encrypt_by_PKCS1_OAEP(test)
+    tmp=str(base64.b64encode(cipher_text),"utf8")
+    print("tmp->",tmp)
     print(cipher_text)
     print(len(cipher_text))
     plain_text = decrypt_by_PKS1_OAEP(cipher_text)

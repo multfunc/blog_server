@@ -2,6 +2,7 @@ import json as python_json
 from flask import json, jsonify, Blueprint, current_app, request
 from flask_cors import *
 from datetime import datetime
+import base64
 
 from blog.utils.rsa_utils import rsa_utils
 
@@ -9,6 +10,7 @@ from blog.models.base import db
 from blog.models.user_info import UserInfo
 from blog.models.role import Role
 from blog.models.authority import Authority
+from blog.models.user_status import UserStatus
 
 user_token_bp = Blueprint('user_token', __name__, url_prefix='/blog/user_token')
 
@@ -42,6 +44,9 @@ def login():
         if password == db_password:  # 密码是否正确
             response_body["status"] = True
             response_body["data"]["message"] = "登陆成功！"
+            token=rsa_utils.encrypt_by_PKCS1_OAEP(bytes(account.encode('utf8')))
+            token=str(base64.b64encode(token),'utf8')
+            response_body["data"]["token"]=token
         else:
             response_body["status"] = False
     else:
@@ -67,6 +72,7 @@ def add_user():
     try:
 
         account = request_body.get("account")
+        name = request_body.get("name")
         en_password = request_body.get("en_password")
 
         is_exist_user_info = db.session.query(UserInfo).filter(UserInfo.account == account).one_or_none()  # 查询数据中是否有该用户
@@ -76,11 +82,14 @@ def add_user():
 
         password = rsa_utils.decrypt_by_PKCS1_v1_5(en_password)
         password = rsa_utils.encrypt_by_PKCS1_OAEP(password)
-        user_info = [UserInfo(account=account, password=password, name="test_name", last_login=datetime.now(),
-                              modified=datetime.now(), create=datetime.now())]
+
+        role = db.session.query(Role).filter(Role.name == "游客").one_or_none()  # 获取游客角色
+        user_info = [UserInfo(account=account, password=password, name=name, modified=datetime.now(),
+                              create=datetime.now(), roles=[role])]
         db.session.add_all(user_info)
         db.session.commit()
         response_body["status"] = True
+        response_body["data"]["message"]="^_^ 注册成功！3s后跳转到登录页......"
     except Exception as e:
         print(e, "\n")
         db.session.rollback()

@@ -1,6 +1,9 @@
 from flask import Blueprint, request, jsonify, json
 from blog.models.base import db
 from flask_cors import CORS
+import base64
+
+from blog.utils.rsa_utils import rsa_utils
 
 test_bp = Blueprint('test', __name__, url_prefix='/test')
 CORS(test_bp)
@@ -19,7 +22,13 @@ def token():
     #request_body = request.get_json()
     try:
         token=request.headers["Authorization"]
+        token=base64.b64decode(bytes(token.encode("utf8")))
         print("token->",token)
+
+        de_token=rsa_utils.decrypt_by_PKS1_OAEP(token)
+        print("decrypt->",de_token)
+        print(b'admin'==de_token)
+
         response_body['status'] = True
         response_body['data'] = None
     except Exception as e:
