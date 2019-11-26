@@ -2,11 +2,32 @@ from flask import Blueprint, request, jsonify, json
 from blog.models.base import db
 from flask_cors import CORS
 import base64
+from time import sleep
 
 from blog.utils.rsa_utils import rsa_utils
 
 test_bp = Blueprint('test', __name__, url_prefix='/test')
 CORS(test_bp)
+
+@test_bp.route('/js', methods=['POST','GET'])
+def js():
+    """
+
+    :return:
+    """
+    response_body = {
+        "status": False,
+        "data": None
+    }
+    # request_body = json.loads(request.data)
+    try:
+
+        response_body['status'] = True
+        response_body['data'] = None
+    except Exception as e:
+        print(e)
+    sleep(2)
+    return jsonify(response_body)
 
 @test_bp.route('/token', methods=['POST'])
 def token():
