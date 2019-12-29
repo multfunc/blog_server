@@ -135,4 +135,5 @@ def note_reading_save():
         response_body['data']['message'] = f"ok!--{datetime.now()}"
     except Exception as e:
         print(e)
+        db.session.rollback()
     return jsonify(response_body)
