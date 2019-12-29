@@ -18,13 +18,17 @@ def init_admin():
         "status": False,
         "data": None
     }
-    role = db.session.query(Role).filter(Role.name == "超级管理员").one_or_none()  # 查询数据库中的是否有“超级管理员”这个角色
-    if role:
-        password = rsa_utils.encrypt_by_PKCS1_OAEP(bytes("&*($%!".encode('utf8')))
-        user_info = UserInfo(account="admin", name="multfunc", password=password, modified=datetime.now(),
-                             create=datetime.now(), roles=[role])
-        db.session.add_all([user_info])
-        db.session.commit()
+    try:
+        role = db.session.query(Role).filter(Role.name == "超级管理员").one_or_none()  # 查询数据库中的是否有“超级管理员”这个角色
+        if role:
+            password = rsa_utils.encrypt_by_PKCS1_OAEP(bytes("&*($%!".encode('utf8')))
+            user_info = UserInfo(account="admin", name="multfunc", password=password, modified=datetime.now(),
+                                 create=datetime.now(), roles=[role])
+            db.session.add_all([user_info])
+            db.session.commit()
+    except Exception as e:
+        print(e)
+        db.session.rollback()
     return jsonify(response_body)
 
 
