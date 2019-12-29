@@ -12,6 +12,44 @@ from blog.models.dimension_note_reading import DimensionNoteReading
 notification_your_bp = Blueprint('notification_your', __name__, url_prefix='/blog/notification_your')
 
 
+@notification_your_bp.route('/note_reading_query', methods=['POST'])
+@cross_origin()  # 置于route后
+def note_reading_query():
+    """
+    
+    :return: 
+    """
+    response_body = {
+        "status": False,
+        "data": {
+            "data": None,
+            "message": None
+        }
+    }
+    request_body = json.loads(request.data)
+    # request_body = request.get_json()
+    try:
+        page_size=request_body.get('page_size',10)
+        page_index=request_body.get('page_index',1)
+        results = db.session.query(DimensionNoteReading).order_by(DimensionNoteReading.create.desc()).limit(page_size).offset((page_index-1)*page_size)
+        tmp = []
+        for result in results:
+            tmp.append({
+                "id": result.id,
+                "origin_name_book": result.origin_name_book,
+                "origin_author_book": result.origin_author_book,
+                'origin_page_book': result.origin_page_book,
+                'note': result.note,
+                'category': result.category,
+                'modified': result.modified
+            })
+        response_body['status'] = True
+        response_body['data']['data'] = tmp
+    except Exception as e:
+        print(e)
+    return jsonify(response_body)
+
+
 @notification_your_bp.route('/tool_tip_category_and_author', methods=['POST'])
 @cross_origin()  # 置于route后
 def tool_tip_category_and_author():
