@@ -9,7 +9,36 @@ from blog.utils.rsa_utils import rsa_utils
 from blog.models.base import db
 from blog.models.dimension_note_reading import DimensionNoteReading
 
+# graph_ql schema
+from blog.GQL_schema.schema import GQL_schema
+
 notification_your_bp = Blueprint('notification_your', __name__, url_prefix='/blog/notification_your')
+
+
+@notification_your_bp.route('/gql', methods=['POST'])
+@cross_origin()  # 置于route后
+def gql():
+    """
+    
+    :return: 
+    """
+    response_body = {
+        "status": False,
+        "gql": None
+    }
+    request_body = json.loads(request.data)
+    # request_body = request.get_json()
+    try:
+        GQL_query = request_body.get("query", None)
+        GQL_result = GQL_schema.execute(GQL_query, context={'session': db.session})
+        print(GQL_result.errors)
+        GQL_result = GQL_result.data
+        print(GQL_result)
+        response_body['status'] = True
+        response_body['gql'] = GQL_result
+    except Exception as e:
+        print(e)
+    return jsonify(response_body)
 
 
 @notification_your_bp.route('/note_reading_query', methods=['POST'])
@@ -29,9 +58,10 @@ def note_reading_query():
     request_body = json.loads(request.data)
     # request_body = request.get_json()
     try:
-        page_size=request_body.get('page_size',10)
-        page_index=request_body.get('page_index',1)
-        results = db.session.query(DimensionNoteReading).order_by(DimensionNoteReading.create.desc()).limit(page_size).offset((page_index-1)*page_size)
+        page_size = request_body.get('page_size', 10)
+        page_index = request_body.get('page_index', 1)
+        results = db.session.query(DimensionNoteReading).order_by(DimensionNoteReading.create.desc()).limit(
+            page_size).offset((page_index - 1) * page_size)
         tmp = []
         for result in results:
             tmp.append({
