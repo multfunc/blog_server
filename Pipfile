@@ -16,6 +16,8 @@ mysql-connector-python = "*"
 elasticsearch-dsl = "*"
 pycryptodome = "*"
 python-docx = "*"
+graphene-sqlalchemy = "*"
+flask-excel = "*"
 
 [requires]
 python_version = "3.8"
