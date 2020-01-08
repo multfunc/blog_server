@@ -1,4 +1,4 @@
-from flask import request, json, jsonify, Blueprint
+from flask import request, json, jsonify, Blueprint,app,current_app
 from flask_cors import *
 from sqlalchemy import func
 
@@ -13,6 +13,15 @@ from blog.models.dimension_note_reading import DimensionNoteReading
 from blog.GQL_schema.schema import GQL_schema
 
 notification_your_bp = Blueprint('notification_your', __name__, url_prefix='/blog/notification_your')
+
+@notification_your_bp.before_request
+def authority_verify():
+    tmp=request
+
+    print('authority verify2')
+    print(request.remote_addr)
+    print(request.remote_user)
+    print("=================")
 
 
 @notification_your_bp.route('/gql', methods=['POST'])
