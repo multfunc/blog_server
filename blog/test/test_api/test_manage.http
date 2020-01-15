@@ -19,3 +19,17 @@ Content-Type: application/json
 {}
 
 ###初始化超级管理员账号
+
+POST http://47.95.255.24/blog/authority_manage/init
+Content-Type: application/json
+
+{}
+
+###初始化角色表、初始化权限表
+
+POST http://47.95.255.24/blog/authority_manage/init/admin
+Content-Type: application/json
+
+{}
+
+###初始化超级管理员账号
