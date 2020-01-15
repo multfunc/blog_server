@@ -12,6 +12,7 @@ from blog.models.user_info import UserInfo
 from blog.models.role import Role
 from blog.models.authority import Authority
 from blog.models.user_status import UserStatus
+from blog.models.user.user_notification import UserNotification
 
 user_token_bp = Blueprint('user_token', __name__, url_prefix='/blog/user_token')
 

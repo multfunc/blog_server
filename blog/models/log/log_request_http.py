@@ -1,4 +1,5 @@
 from blog.models.base import db
+from datetime import datetime
 
 
 class LogRequestHttp(db.Model):
@@ -12,4 +13,4 @@ class LogRequestHttp(db.Model):
     user_agent = db.Column(db.String(256))
     port_destination = db.Column(db.Integer)
     referrer = db.Column(db.String(255))
-    create = db.Column(db.DateTime, nullable=False)
+    create = db.Column(db.DateTime, nullable=False,default=datetime.now)

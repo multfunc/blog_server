@@ -18,6 +18,8 @@ pycryptodome = "*"
 python-docx = "*"
 graphene-sqlalchemy = "*"
 flask-excel = "*"
+flask-mail = "*"
+authlib = "*"
 
 [requires]
 python_version = "3.8"

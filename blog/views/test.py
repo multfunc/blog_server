@@ -7,6 +7,7 @@ from datetime import datetime
 import os, sys, random, string
 
 from blog.utils.rsa_utils import rsa_utils
+from blog.models.user.user_notification import UserNotification
 # from blog.GQL.dimension_note_reading import dimension_note_reading_schema as schema
 from blog.GQL_schema.schema import GQL_schema as schema
 
@@ -65,6 +66,7 @@ def js():
         response_body['data'] = {
             "current": datetime.now()
         }
+        db.session.query(UserNotification).all()
     except Exception as e:
         print(e)
     sleep(2)
